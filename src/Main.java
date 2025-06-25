@@ -11,7 +11,9 @@ public class Main {
                 new Product(4L, "Lord of the Rings", "Books", 150.0),
                 new Product(5L, "Notebook", "Electronics", 5.0),
                 new Product(6L, "Baby Bottle", "Baby", 25.0),
-                new Product(7L, "Diapers", "Baby", 30.0)
+                new Product(7L, "Diapers", "Baby", 30.0),
+                new Product(8L, "Action Figure", "Boys", 40.0),
+                new Product(9L, "Toy Car", "Boys", 25.0)
         );
 
         Customer franco = new Customer(1L, "Franco", 1);
@@ -43,5 +45,19 @@ public class Main {
 
         System.out.println("Ordini con almeno un prodotto nella categoria 'Baby':");
         babyOrders.forEach(System.out::println);
+
+
+        System.out.println("========== Parte 3 ==========");
+        List<Product> boysDiscounted = products.stream()
+                .filter(p -> p.getCategory().equalsIgnoreCase("Boys"))
+                .map(p -> new Product(
+                        p.getId(),
+                        p.getName(),
+                        p.getCategory(),
+                        p.getPrice() * 0.9
+                )).toList();
+
+        System.out.println("Prodotti 'Boys' con 10% di sconto:");
+        boysDiscounted.forEach(System.out::println);
     }
 }
