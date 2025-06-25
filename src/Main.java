@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,11 +30,19 @@ public class Main {
                 new Order(103L, "DELIVERED", LocalDate.of(2025, 2, 20), LocalDate.of(2025, 2, 25),
                         Arrays.asList(products.get(6), products.get(1)), maria),
                 new Order(104L, "CANCELLED", LocalDate.of(2025, 3, 1), LocalDate.of(2025, 3, 6),
-                        Arrays.asList(products.get(3), products.get(4)), stefania)
+                        Arrays.asList(products.get(3), products.get(4)), stefania),
+                new Order(105L, "DELIVERED", LocalDate.of(2021, 2, 5), LocalDate.of(2021, 2, 10),
+                        Arrays.asList(products.get(0), products.get(8)), bob)
         );
 
+        LocalDate startDate = LocalDate.of(2021, 2, 1);
+        LocalDate endDate = LocalDate.of(2021, 4, 1);
+
         System.out.println("========== Parte 1 ==========");
-        List<Product> expensiveBooks = products.stream().filter(p -> p.getCategory().equalsIgnoreCase("Books")).filter(p -> p.getPrice() > 100).toList();
+        List<Product> expensiveBooks = products.stream()
+                .filter(p -> p.getCategory().equalsIgnoreCase("Books"))
+                .filter(p -> p.getPrice() > 100)
+                .toList();
 
         System.out.println("Prodotti 'Books' con prezzo > 100");
         expensiveBooks.forEach(System.out::println);
@@ -41,7 +50,9 @@ public class Main {
 
         System.out.println("========== Parte 2 ==========");
         List<Order> babyOrders = orders.stream()
-                .filter(order -> order.getProducts().stream().anyMatch(product -> product.getCategory().equalsIgnoreCase("Baby"))).toList();
+                .filter(order -> order.getProducts().stream()
+                        .anyMatch(product -> product.getCategory().equalsIgnoreCase("Baby")))
+                .toList();
 
         System.out.println("Ordini con almeno un prodotto nella categoria 'Baby':");
         babyOrders.forEach(System.out::println);
@@ -59,5 +70,20 @@ public class Main {
 
         System.out.println("Prodotti 'Boys' con 10% di sconto:");
         boysDiscounted.forEach(System.out::println);
+
+
+        System.out.println("========== Parte 4 ==========");
+        List<Product> productsTier2InRange = new ArrayList<>();
+
+        for (Order order : orders) {
+            if (order.getCustomer().getTier() == 2 &&
+                    !order.getOrderDate().isBefore(startDate) &&
+                    order.getOrderDate().isBefore(endDate)) {
+                productsTier2InRange.addAll(order.getProducts());
+            }
+        }
+
+        System.out.println("Prodotti ordinati da clienti tier 2 tra 01-Feb-2021 e 01-Apr-2021:");
+        productsTier2InRange.forEach(System.out::println);
     }
 }
